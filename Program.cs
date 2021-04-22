@@ -25,7 +25,7 @@ namespace JurasicPark
         static string PromptForString(string prompt)
         {
             Console.Write(prompt);
-            var userInput = Console.ReadLine();
+            var userInput = Console.ReadLine().ToUpper();
             return userInput;
         }
 
@@ -33,7 +33,7 @@ namespace JurasicPark
         {
             Console.Write(prompt);
             int userInput;
-            var isThisGoodInput = Int32.TryParse(Console.ReadLine(), out userInput);
+            var isThisGoodInput = Int32.TryParse(Console.ReadLine().ToUpper(), out userInput);
             if (isThisGoodInput)
             {
                 return userInput;
@@ -50,14 +50,12 @@ namespace JurasicPark
         {
             var dinosaurs = new List<Dinosaur>();
 
-            var dinosaur = new Dinosaur();
-
             var keepGoing = true;
 
             while (keepGoing)
             {
                 Console.WriteLine();
-                Console.WriteLine("What would you like to do? View the dinosaurs, Add the dinosaurs, Remove a dinosaur, Transfer a dinosaur, Summary of the dinosaurs, or Quit "); var choice = Console.ReadLine().ToUpper();
+                Console.WriteLine("What would you like to do? (V)iew the dinosaurs, (A)dd the dinosaurs, (R)emove a dinosaur, (T)ransfer a dinosaur, (S)ummary of the dinosaurs, or (Q)uit "); var choice = Console.ReadLine().ToUpper();
 
                 if (choice == "Q")
                 {
@@ -76,11 +74,11 @@ namespace JurasicPark
 
                 else if (choice == "R")
                 {
-                    var name = PromptForString("Which dinosaur would you like to remove? ");
+                    var name = PromptForString("Which dinosaur would you like to hit with a meteor? ");
                     Dinosaur foundDinosaur = dinosaurs.FirstOrDefault(s => s.Name == name);
                     if (foundDinosaur == null)
                     {
-                        Console.WriteLine("No dinosaurs under that name to remove");
+                        Console.WriteLine("No dinosaurs by that name dummy");
                     }
                     else
                     {
@@ -99,8 +97,9 @@ namespace JurasicPark
                     }
                     else
                     {
-                        var newEnclosure = PromptForInteger($"What {transfer} new enclosure number? ");
+                        var newEnclosure = PromptForInteger($"What is {transfer}'s new enclosure number? ");
                         foundDinosaur.EnclosureNumber = newEnclosure;
+                        Console.WriteLine($"{transfer} is now in Heaven jk they are in enclosure {newEnclosure}");
                     }
                 }
 
@@ -114,12 +113,14 @@ namespace JurasicPark
 
                 else
                 {
-                    dinosaur.Name = PromptForString("What is the dinosaur name? ");
-                    dinosaur.DietType = PromptForString("What is the dinosaur DietType? Herbivore or Carnivore? ");
-                    dinosaur.Weight = PromptForInteger("What is the weight of the dinosaur? ");
-                    dinosaur.EnclosureNumber = PromptForInteger("What is the enclosure number? ");
+                    var dino = new Dinosaur();
 
-                    dinosaurs.Add(dinosaur);
+                    dino.Name = PromptForString("What is the dinosaur name? ");
+                    dino.DietType = PromptForString("What is the dinosaur DietType? Herbivore or Carnivore? ");
+                    dino.Weight = PromptForInteger("What is the weight of the dinosaur? ");
+                    dino.EnclosureNumber = PromptForInteger("What is the enclosure number? ");
+
+                    dinosaurs.Add(dino);
                 }
             }
         }
