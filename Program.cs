@@ -8,13 +8,13 @@ namespace JurasicPark
     {
         public string Name { get; set; }
         public string DietType { get; set; }
-        public DateTime WhenAcquired { get; set; } = DateTime.Now;
         public int Weight { get; set; }
         public int EnclosureNumber { get; set; }
+        public DateTime DateAcquired { get; set; } = DateTime.Now;
 
         public string Description()
         {
-            var newDescription = $"This Dino is called {Name} they are a {DietType}. We got them {WhenAcquired} and weigh {Weight} and are kept in enclosure {EnclosureNumber}";
+            var newDescription = $"Name: {Name} Diet: {DietType} Acquired: {DateAcquired} Weight: {Weight} Enclosure: {EnclosureNumber}";
             return newDescription;
         }
 
@@ -52,20 +52,12 @@ namespace JurasicPark
 
             var dinosaur = new Dinosaur();
 
-            dinosaur.Name = PromptForString("What is the dinosaur name? ");
-            dinosaur.DietType = PromptForString("What is the dinosaur DietType? ");
-            // dinosaur.WhenAcquired = PromptForInteger("When did we acquire this dinosaur? ");
-            dinosaur.Weight = PromptForInteger("What is the weight of the dinosaur");
-            dinosaur.EnclosureNumber = PromptForInteger("What is the enclosure number? ");
-
-            dinosaurs.Add(dinosaur);
-
             var keepGoing = true;
 
             while (keepGoing)
             {
-                Console.WriteLine("What would you like to do? (V)iew the dinosaurs, Add the dinosaurs, Remove a dinosaur, (T)ransfer a dinosaur, Summary of the dinosaurs, or (Q)uit ");
-                var choice = Console.ReadLine().ToUpper();
+                Console.WriteLine();
+                Console.WriteLine("What would you like to do? View the dinosaurs, Add the dinosaurs, Remove a dinosaur, Transfer a dinosaur, Summary of the dinosaurs, or Quit "); var choice = Console.ReadLine().ToUpper();
 
                 if (choice == "Q")
                 {
@@ -74,7 +66,12 @@ namespace JurasicPark
 
                 else if (choice == "V")
                 {
-                    Console.Write("mango");
+                    foreach (var pineapple in dinosaurs)
+                    {
+                        Console.Write(pineapple.Description());
+                    }
+
+                    var view = dinosaurs.OrderBy(s => s.DateAcquired);
                 }
 
                 else if (choice == "R")
@@ -94,19 +91,31 @@ namespace JurasicPark
 
                 else if (choice == "T")
                 {
-                    Console.WriteLine("Transferred my guy");
+                    var transfer = PromptForString("What dinosaur would you like to transfer? ");
+                    Dinosaur foundDinosaur = dinosaurs.FirstOrDefault(s => s.Name == transfer);
+                    if (foundDinosaur == null)
+                    {
+                        Console.WriteLine("No dinosaur by that name dummy");
+                    }
+                    else
+                    {
+                        var newEnclosure = PromptForInteger($"What {transfer} new enclosure number? ");
+                        foundDinosaur.EnclosureNumber = newEnclosure;
+                    }
                 }
 
                 else if (choice == "S")
                 {
-                    Console.WriteLine("Summaried bruh");
+                    var herb = PromptForString("Would you like a summary of the herbivore and carnivores? ");
+                    var foundHerb = dinosaurs.Where(s => s.DietType == "herbivore").Count();
+                    var foundCarn = dinosaurs.Count(s => s.DietType == "herbivore");
+                    Console.WriteLine($"There are {foundHerb} herbivores and {foundCarn} carnivore!");
                 }
 
                 else
                 {
                     dinosaur.Name = PromptForString("What is the dinosaur name? ");
-                    dinosaur.DietType = PromptForString("What is the dinosaur DietType? ");
-                    dinosaur.WhenAcquired = DateTime.Now;
+                    dinosaur.DietType = PromptForString("What is the dinosaur DietType? Herbivore or Carnivore? ");
                     dinosaur.Weight = PromptForInteger("What is the weight of the dinosaur? ");
                     dinosaur.EnclosureNumber = PromptForInteger("What is the enclosure number? ");
 
